@@ -1,12 +1,13 @@
 # Dependencies
-/node_modules
+frontend/docusaurus-app/node_modules
+backend/api/api/.venv  # Assuming Python venv lives here
 
 # Production
-/build
+frontend/docusaurus-app/build
 
 # Generated files
-.docusaurus
-.cache-loader
+frontend/docusaurus-app/.docusaurus
+frontend/docusaurus-app/.cache-loader
 
 # Misc
 .DS_Store

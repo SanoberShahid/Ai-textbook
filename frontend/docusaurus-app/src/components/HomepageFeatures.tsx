@@ -4,6 +4,10 @@ import Heading from '@theme/Heading';
 import React from 'react';
 import styles from './HomepageFeatures.module.css'; // Import the CSS module
 
+import MountainSvg from '@site/static/img/undraw_docusaurus_mountain.svg';
+import TreeSvg from '@site/static/img/undraw_docusaurus_tree.svg';
+import ReactSvg from '@site/static/img/undraw_docusaurus_react.svg';
+
 type FeatureItem = {
   title: string;
   Svg: React.ComponentType<React.ComponentProps<'svg'>>;
@@ -12,32 +16,33 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Comprehensive Chapters',
+    Svg: MountainSvg,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Dive deep into the world of Physical AI and Humanoid Robotics with
+        seven detailed chapters covering everything from fundamentals to advanced
+        concepts.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Interactive Quizzes',
+    Svg: TreeSvg,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we'll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Test your knowledge at the end of each chapter with interactive quizzes
+        to reinforce your learning and track your progress.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Ask the Book',
+    Svg: ReactSvg,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Have a question? Use our innovative "Ask the Book" feature to get
+        answers directly from the textbook content itself, powered by AI.
       </>
     ),
   },

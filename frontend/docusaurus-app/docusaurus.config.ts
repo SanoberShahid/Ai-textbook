@@ -1,11 +1,13 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import { resolve } from 'path'; // Import resolve for path handling
+
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'My-Site', // Updated title
+  title: 'AI Textbook', // Updated title
   tagline: 'A Comprehensive Guide to Physical AI & Humanoid Robotics',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -13,10 +15,15 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
-  // Set the production url of your site here
-url: 'https://my-ai-textbook-xasc.vercel.app',
-baseUrl: '/',
+  customFields: {
+    // Make the backend URL configurable
+    backendUrl: process.env.BACKEND_URL || 'http://localhost:8000',
+  },
 
+  // Set the production url of your site here
+url: 'https://SanoberShahid.github.io',
+baseUrl: '/my-ai-textbook/',
+  favicon: 'img/favicon.ico', // Set the favicon path
 
 
 
@@ -31,7 +38,13 @@ baseUrl: '/',
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ur'],
+    localeConfigs: {
+      ur: {
+        htmlLang: 'ur-UR',
+        direction: 'rtl',
+      },
+    },
   },
 
   presets: [
@@ -53,10 +66,10 @@ baseUrl: '/',
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My-Site', // Updated title
+      title: 'AI Textbook', // Updated title
       logo: {
         alt: 'Docusaurus Logo',
-        src: 'img/logo.svg', // Assuming a logo.svg exists in static/img
+        src: 'img/favicon.ico',
       },
       items: [
         {
@@ -71,12 +84,17 @@ baseUrl: '/',
           position: 'left'
         },
         {
-          to: '/ask-the-book', // Assuming a page or external link for 'Ask the Book'
-          label: 'Ask the Book',
+          to: '/rag-chatbot',
+          label: 'RAG Chatbot',
           position: 'left'
         },
+
         {
-          href: 'https://github.com/user/repo', // User needs to update this to their actual repo
+          type: 'localeDropdown',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/SanoberShahid/my-ai-textbook', // User needs to update this to their actual repo
           label: 'GitHub',
           position: 'right',
         },
@@ -86,8 +104,8 @@ baseUrl: '/',
       style: 'dark',
       logo: {
         alt: 'Docusaurus Logo',
-        src: '/img/logo.svg',
-        href: 'https://github.com/user/repo', // User needs to update this
+        src: 'img/favicon.ico',
+        href: 'https://github.com/SanoberShahid/my-ai-textbook', // User needs to update this
         width: 50,
         height: 50,
       },
@@ -123,7 +141,7 @@ baseUrl: '/',
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/user/repo', // Placeholder, user needs to update
+              href: 'https://github.com/SanoberShahid/my-ai-textbook', // Placeholder, user needs to update
             },
           ],
         },

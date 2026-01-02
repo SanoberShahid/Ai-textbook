@@ -98,3 +98,9 @@ Embodied Intelligence is poised to become one of the most transformative technol
 *   **Actuators:** Devices that produce physical action (e.g., motors, grippers).
 *   **Cyber-Physical Systems:** Systems that integrate computation with physical processes.
 *   **Feedback Loop:** The continuous cycle of perception, cognition, and action that drives learning in Embodied AI.
+
+---
+
+## Chapter 1 Quiz
+
+<ChapterQuiz chapter="Chapter 1" />

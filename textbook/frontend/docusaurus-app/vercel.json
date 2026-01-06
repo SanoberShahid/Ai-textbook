@@ -1,0 +1,18 @@
+{
+  "framework": "docusaurus",
+  "builds": [
+    {
+      "src": "frontend/docusaurus-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/docusaurus-app/build/$1"
+    }
+  ]
+}

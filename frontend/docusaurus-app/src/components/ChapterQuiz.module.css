@@ -1,0 +1,46 @@
+.chapterQuizContainer {
+    border: 1px solid var(--ifm-toc-border-color);
+    border-radius: var(--ifm-border-radius);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    background-color: var(--ifm-background-surface-color);
+    box-shadow: var(--ifm-box-shadow);
+    text-align: center;
+  }
+  
+  .startScreen h3 {
+    font-size: 1.5rem;
+    color: var(--ifm-color-primary);
+  }
+  
+  .startButton {
+    background-color: var(--ifm-color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--ifm-border-radius);
+    padding: 12px 24px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+  }
+  
+  .startButton:hover:not(:disabled) {
+    background-color: var(--ifm-color-primary-dark);
+  }
+  
+  .startButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .loading {
+    font-style: italic;
+    color: var(--ifm-color-secondary-darkest);
+  }
+  
+  .error {
+    color: var(--ifm-color-danger);
+    margin-top: 1rem;
+  }
+  

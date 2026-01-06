@@ -1,0 +1,26 @@
+{
+  "title": {
+    "message": "AI Textbook",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Docusaurus Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Text Book": {
+    "message": "Text Book",
+    "description": "Navbar item with label Text Book"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.Ask the Book": {
+    "message": "Ask the Book",
+    "description": "Navbar item with label Ask the Book"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

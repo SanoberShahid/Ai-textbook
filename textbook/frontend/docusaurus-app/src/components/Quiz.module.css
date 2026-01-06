@@ -1,0 +1,121 @@
+.quizContainer {
+  background-color: var(--ifm-color-emphasis-100);
+  border-radius: var(--ifm-border-radius);
+  padding: 20px;
+  box-shadow: var(--ifm-box-shadow-md);
+  margin-top: 2rem;
+  color: var(--ifm-font-color-base);
+}
+
+.quizContainer h2 {
+  color: var(--ifm-color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.questionNumber {
+  font-size: 0.9em;
+  color: var(--ifm-color-secondary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.questionText {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.option {
+  background-color: var(--ifm-background-color);
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-border-radius);
+  padding: 10px 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  color: var(--ifm-font-color-base);
+  font-size: 1em;
+  width: 100%;
+}
+
+.option:hover:not(:disabled) {
+  background-color: var(--ifm-hover-background-color);
+  border-color: var(--ifm-color-primary-light);
+}
+
+.option.selected {
+  background-color: var(--ifm-color-primary-lightest);
+  border-color: var(--ifm-color-primary);
+}
+
+.option.correct {
+  background-color: var(--ifm-color-success-lightest);
+  border-color: var(--ifm-color-success);
+  font-weight: bold;
+  color: var(--ifm-font-color-base);
+}
+
+.option.incorrect {
+  background-color: var(--ifm-color-danger-lightest);
+  border-color: var(--ifm-color-danger);
+  font-weight: bold;
+  color: var(--ifm-font-color-base);
+}
+
+.option:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.submitButton,
+.nextButton {
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ifm-border-radius);
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover:not(:disabled),
+.nextButton:hover:not(:disabled) {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+.submitButton:disabled,
+.nextButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.feedback {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.correctFeedback {
+  color: var(--ifm-color-success);
+}
+
+.incorrectFeedback {
+  color: var(--ifm-color-danger);
+}

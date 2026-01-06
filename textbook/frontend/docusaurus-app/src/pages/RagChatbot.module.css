@@ -1,0 +1,134 @@
+/* RagChatbot.module.css */
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  overflow: hidden;
+  background-color: var(--ifm-background-color);
+}
+
+.messageList {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  max-width: 80%;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+.userMessage {
+  background-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-contrast-foreground);
+  align-self: flex-end;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.botMessage {
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+  align-self: flex-start;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.inputArea {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.inputBox {
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  margin-right: 0.5rem;
+}
+
+.sendButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border-radius: var(--ifm-global-radius);
+  cursor: pointer;
+}
+
+.sendButton:disabled {
+  background-color: var(--ifm-color-emphasis-400);
+  cursor: not-allowed;
+}
+
+.errorMessage {
+    color: var(--ifm-color-danger);
+    padding: 0.75rem;
+    border-radius: var(--ifm-global-radius);
+    background-color: var(--ifm-color-danger-contrast-background);
+    text-align: center;
+}
+
+/* Loading dots animation */
+.loadingDots {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 20px;
+}
+.loadingDots::after {
+  content: '.';
+  font-size: 2rem;
+  animation: dots 1.4s infinite;
+  animation-delay: 0s;
+}
+.loadingDots::before {
+  content: '.';
+  font-size: 2rem;
+  animation: dots 1.4s infinite;
+  animation-delay: 0.2s;
+}
+.loadingDots-ellipsis {
+    content: '.';
+    font-size: 2rem;
+    animation: dots 1.4s infinite;
+    animation-delay: 0.4s;
+}
+
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  40% {
+    color: var(--ifm-font-color-base);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  60% {
+    text-shadow:
+      .25em 0 0 var(--ifm-font-color-base),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 var(--ifm-font-color-base),
+      .5em 0 0 var(--ifm-font-color-base);
+  }
+}

@@ -1,0 +1,111 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+/* Orange color scheme */
+:root {
+  --ifm-color-primary: #FFA500;
+  --ifm-color-primary-dark: #E69500;
+  --ifm-color-primary-darker: #CC8400;
+  --ifm-color-primary-darkest: #B37300;
+  --ifm-color-primary-light: #FFB31A;
+  --ifm-color-primary-lighter: #FFBF33;
+  --ifm-color-primary-lightest: #FFCC4D;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #FFC966;
+  --ifm-color-primary-dark: #FFC04D;
+  --ifm-color-primary-darker: #FFB733;
+  --ifm-color-primary-darkest: #FFAE1A;
+  --ifm-color-primary-light: #FFD280;
+  --ifm-color-primary-lighter: #FFD899;
+  --ifm-color-primary-lightest: #FFDFB3;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Custom styles for Text Selection Highlighter and Popup */
+.ask-ai-button {
+  position: absolute;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ifm-border-radius);
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+  transform: translateX(-50%); /* Center button horizontally above selection */
+  box-shadow: var(--ifm-box-shadow-md);
+  transition: background-color 0.2s ease;
+}
+
+.ask-ai-button:hover:not(:disabled) {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+.ask-ai-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.explanation-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001; /* Above the button */
+}
+
+.explanation-popup-content {
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  padding: 20px;
+  border-radius: var(--ifm-border-radius);
+  box-shadow: var(--ifm-box-shadow-lg);
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.explanation-popup-content h3 {
+  margin-top: 0;
+  color: var(--ifm-color-primary);
+}
+
+.explanation-popup-content p {
+  margin-bottom: 0;
+}
+
+.explanation-popup-content .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--ifm-color-secondary);
+}
+
+.explanation-popup-content .close-button:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+/* Ensure left navbar items are aligned to the left */
+.navbar__items--left {
+  justify-content: flex-start;
+}

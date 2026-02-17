@@ -1,12 +1,9 @@
 """
-Configuration module for Qdrant embeddings setup
+Configuration module for the AI Textbook RAG API
 """
 
 import os
 from typing import Optional
-
-
-
 
 
 class EmbeddingConfig:

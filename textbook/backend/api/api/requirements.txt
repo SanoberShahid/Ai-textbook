@@ -2,7 +2,6 @@ google-generativeai
 python-dotenv
 fastapi
 uvicorn[standard]
-qdrant-client
-sentence-transformers
-torch
-transformers
+psycopg2
+psycopg2-binary
+pgvector

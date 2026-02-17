@@ -14,11 +14,11 @@ def test_genai():
         genai.configure(api_key=api_key)
         try:
             # Test if the model exists
-            model_info = genai.get_model('gemini-1.5-flash')
+            model_info = genai.get_model('gemini-pro')
             print(f"Model info: {model_info.name}")
             
             # Test generation
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-pro')
             response = model.generate_content('Hello, are you working?')
             print(f"GenAI is working: {str(response.text)[:100]}...")
         except Exception as e:

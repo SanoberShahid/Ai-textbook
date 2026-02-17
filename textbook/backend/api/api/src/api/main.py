@@ -1,24 +1,43 @@
+"""
+AI Textbook RAG API - Main FastAPI Application
+"""
+
 import os
 import warnings
+import json
+import re
+from typing import List, Optional
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", FutureWarning)
     import google.generativeai as genai
-import json
+
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
 from pgvector.psycopg2 import register_vector
-import re
 
-from logging_config import log
-from fast_embeddings import generate_fast_embedding
+from src.api.logging_config import log
+from src.api.fast_embeddings import generate_fast_embedding
 
+# Load environment variables
 load_dotenv()
 
 # --- Globals ---
 neon_conn = None
+
+
+# --- Pydantic Models ---
+class Message(BaseModel):
+    role: str
+    content: str
+
+
+class ChatRequest(BaseModel):
+    messages: List[Message]
+
 
 # --- Environment and Model Configuration ---
 def load_environment():
@@ -60,9 +79,9 @@ def load_environment():
         except Exception as e:
             log.error(f"Failed to connect to database or setup table: {e}", exc_info=True)
 
-    # Reset the database to ensure proper embedding format
-    reset_database()
+    # Only populate database, don't reset on every startup
     populate_database()
+
 
 def populate_database():
     """Populates the database with textbook content."""
@@ -73,17 +92,29 @@ def populate_database():
     try:
         with neon_conn.cursor() as cur:
             cur.execute("SELECT COUNT(*) FROM textbook_content;")
-            if cur.fetchone()[0] > 0:
-                log.info("Database already populated. Skipping.")
+            count = cur.fetchone()[0]
+            if count > 0:
+                log.info(f"Database already populated with {count} records. Skipping.")
                 return
 
         log.info("Populating database with textbook content...")
+        # Navigate to the docs directory (5 levels up from src/api to reach project root)
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.abspath(os.path.join(script_dir, "..", "..", ".."))
+        project_root = os.path.abspath(os.path.join(script_dir, "..", "..", "..", "..", ".."))
         docs_dir = os.path.join(project_root, "frontend", "docusaurus-app", "docs")
-        doc_files = [os.path.join(docs_dir, f) for f in os.listdir(docs_dir) if f.endswith(".md")]
 
+        log.info(f"Looking for docs at: {docs_dir}")
+        
+        if not os.path.exists(docs_dir):
+            log.error(f"Docs directory not found: {docs_dir}")
+            return
+
+        doc_files = [os.path.join(docs_dir, f) for f in os.listdir(docs_dir) if f.endswith(".md")]
+        log.info(f"Found {len(doc_files)} markdown files: {[os.path.basename(f) for f in doc_files]}")
+
+        records_added = 0
         for doc_file in doc_files:
+            log.info(f"Processing: {os.path.basename(doc_file)}")
             with open(doc_file, "r", encoding="utf-8") as f:
                 content = f.read()
 
@@ -106,28 +137,33 @@ def populate_database():
                     for chunk in chunks:
                         chunk_stripped = chunk.strip()
                         if len(chunk_stripped) > 50:
-                            embedding = generate_fast_embedding(chunk_stripped, "retrieval_document")
-                            # Format the embedding properly for pgvector
-                            formatted_embedding = [float(x) for x in embedding]
-                            with neon_conn.cursor() as cur:
-                                cur.execute(
-                                    """
-                                    INSERT INTO textbook_content (source_file, chapter, section, content, embedding)
-                                    VALUES (%s, %s, %s, %s, %s);
-                                    """,
-                                    (file_name, chapter_title, current_section_title, chunk_stripped, formatted_embedding)
-                                )
-                            neon_conn.commit()
+                            try:
+                                embedding = generate_fast_embedding(chunk_stripped, "retrieval_document")
+                                formatted_embedding = [float(x) for x in embedding]
+                                with neon_conn.cursor() as cur:
+                                    cur.execute(
+                                        """
+                                        INSERT INTO textbook_content (source_file, chapter, section, content, embedding)
+                                        VALUES (%s, %s, %s, %s, %s);
+                                        """,
+                                        (file_name, chapter_title, current_section_title, chunk_stripped, formatted_embedding)
+                                    )
+                                neon_conn.commit()
+                                records_added += 1
+                            except Exception as e:
+                                log.error(f"Error processing chunk: {e}")
+        
+        log.info(f"Finished populating database. Added {records_added} records.")
     except Exception as e:
         log.error(f"Error populating database: {e}", exc_info=True)
-    log.info("Finished populating database.")
+
 
 def reset_database():
     """Resets the database by dropping and recreating the table."""
     if not neon_conn:
         log.error("Cannot reset database without a connection.")
         return
-    
+
     try:
         with neon_conn.cursor() as cur:
             cur.execute("DROP TABLE IF EXISTS textbook_content CASCADE;")
@@ -146,12 +182,14 @@ def reset_database():
     except Exception as e:
         log.error(f"Error resetting database: {e}", exc_info=True)
 
+
 # --- FastAPI App Setup ---
 app = FastAPI(
     title="AI Textbook RAG API",
     description="An API for interacting with the AI Textbook using a RAG pipeline with Neon.",
     version="1.0.0"
 )
+
 
 @app.get("/")
 def read_root():
@@ -165,6 +203,8 @@ def read_root():
         "status": "healthy"
     }
 
+
+# Configure CORS
 allowed_origins = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001").split(',')
 
 app.add_middleware(
@@ -175,23 +215,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Pydantic Models ---
-class Message(BaseModel):
-    role: str
-    content: str
-
-class ChatRequest(BaseModel):
-    messages: list[Message]
 
 # --- Lifecycle Events ---
-# Load environment and initialize connection when the module is imported
-load_environment()
-
 @app.on_event("startup")
 def startup_event():
     """Sets up the database at startup."""
-    # Database setup is handled in load_environment() which is called during initialization
-    pass
+    load_environment()
+
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -199,6 +229,7 @@ def shutdown_event():
     global neon_conn
     if neon_conn:
         neon_conn.close()
+
 
 @app.post("/ask", summary="Ask a Question (RAG)")
 def ask(request: ChatRequest):
@@ -214,7 +245,6 @@ def ask(request: ChatRequest):
 
     try:
         # Convert the embedding to the proper format for pgvector
-        # Ensure the embedding is a list of floats
         formatted_embedding = [float(x) for x in query_embedding]
 
         with neon_conn.cursor() as cur:
@@ -228,7 +258,7 @@ def ask(request: ChatRequest):
         if not search_results:
             log.warning("No relevant content found in database for the query")
             # Return a default response if no context is found
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-2.5-flash')
             prompt = f"You are a helpful AI assistant. The user asked: '{last_user_message}'. Unfortunately, I couldn't find relevant information in the textbook to answer this question."
             response = model.generate_content(prompt)
             final_answer = f"{response.text}\n\nNote: No relevant sources were found in the textbook."
@@ -242,20 +272,21 @@ def ask(request: ChatRequest):
         conversation_history = "\n".join([f"{msg.role.capitalize()}: {msg.content}" for msg in request.messages])
         prompt = f"You are a helpful AI assistant. Answer the user's question based on the provided context.\n\nContext:\n{context}\n\nConversation History:\n{conversation_history}\n\nAnswer:"
 
-        # Use a valid Gemini model - gemini-pro is commonly available
-        model = genai.GenerativeModel('gemini-pro')
+        # Use gemini-2.5-flash model
+        model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content(prompt)
-        
+
         # Check if response has text
         if hasattr(response, 'text') and response.text:
             final_answer = f"{response.text}\n\n--- Sources ---\n{unique_citations}"
         else:
             final_answer = f"I'm sorry, but I couldn't generate a response for your query: '{last_user_message}'\n\n--- Sources ---\n{unique_citations}"
-            
+
         return {"answer": final_answer}
     except Exception as e:
         log.error(f"Error processing RAG request: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to generate an answer.")
+
 
 # --- Main execution ---
 if __name__ == "__main__":

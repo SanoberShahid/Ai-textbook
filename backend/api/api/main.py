@@ -131,13 +131,10 @@ allowed_origins.extend([
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=["*"],  # Allow all origins for debugging
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    allow_origin_regex=".*",  # Allow any origin with regex
-    # Additional options to handle preflight requests
-    max_age=600,
 )
 
 # --- Pydantic Models ---
